@@ -20,14 +20,28 @@ def generate_sql():
          print("An error occurred:", e)
          return 
      
-@app.route('/getDatabaseTablenames', methods=['POST'])
+@app.route('/getDatabaseTableNames', methods=['POST'])
 def get_database_tables():
      try:   
-      print('in getDatabaseTablenames')
       requestDataDict = request.get_json()
       serverValue = requestDataDict['server']
       dbValue = requestDataDict['db']
       respdata = databaseUtilities.retrieve_names_of_all_tables(serverValue,dbValue)
+      #class to dictionary
+      obj_dict = vars(respdata)
+      return obj_dict
+     except Exception as e:
+         response = clsResponse.Response(False,str(e),None)
+         return response 
+
+
+@app.route('/getDatabaseViewsNames', methods=['POST'])
+def get_database_views():
+     try:   
+      requestDataDict = request.get_json()
+      serverValue = requestDataDict['server']
+      dbValue = requestDataDict['db']
+      respdata = databaseUtilities.retrieve_names_of_all_views(serverValue,dbValue)
       #class to dictionary
       obj_dict = vars(respdata)
       return obj_dict

@@ -45,3 +45,18 @@ def retrieve_names_of_all_tables(server: str,database: str)->clsResponse.Respons
    except Exception as e:
     response = clsResponse.Response(False,str(e),None)
     return response
+   
+def retrieve_names_of_all_views(server: str,database: str)->clsResponse.Response:
+   try:
+    sqlTodb = ""
+    #Open the query from file
+    sql = 'SELECT name FROM sys.views;'
+    resp =  execute_sql_query(server,database,sql)
+    if(resp.success):
+       response = clsResponse.Response(True,'',resp.data)
+    else:
+       response = clsResponse.Response(True,resp.error,None)
+    return response
+   except Exception as e:
+    response = clsResponse.Response(False,str(e),None)
+    return response
