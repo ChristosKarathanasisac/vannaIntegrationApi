@@ -50,7 +50,14 @@ def create_new_model(modelName:str) -> clsResponse.Response:
 def train_with_tables(modelName:str,server: str,database: str,desired_table_names: list) -> clsResponse.Response:
     try:
         vn.set_api_key('d72ab2501d4e426e99baf6b5ed3e750e')
-        vn.set_model(modelName)
+        models = vn.get_models()
+        if(str(modelName) in models):
+            print('Model Exist')
+        else:
+            print('Model missing')
+            response = clsResponse.Response(False,'Model missing',None)
+            return response
+        vn.set_model(str(modelName))
         vn.run_sql = run_vanna_sql_sqlServer
 
         sqlTodb = ""
@@ -74,6 +81,13 @@ def train_with_tables(modelName:str,server: str,database: str,desired_table_name
 def train_with_views(modelName:str,server: str,database: str,desired_view_names: list) -> clsResponse.Response:
     try:
         vn.set_api_key('d72ab2501d4e426e99baf6b5ed3e750e')
+        models = vn.get_models()
+        if(str(modelName) in models):
+            print('Model Exist')
+        else:
+            print('Model missing')
+            response = clsResponse.Response(False,'Model missing',None)
+            return response
         vn.set_model(modelName)
         vn.run_sql = run_vanna_sql_sqlServer
 
@@ -94,6 +108,13 @@ def train_with_views(modelName:str,server: str,database: str,desired_view_names:
 def train_with_statement(modelName:str,statement: str,statementType: str)  -> clsResponse.Response:
       try:
         vn.set_api_key('d72ab2501d4e426e99baf6b5ed3e750e')
+        models = vn.get_models()
+        if(str(modelName) in models):
+            print('Model Exist')
+        else:
+            print('Model missing')
+            response = clsResponse.Response(False,'Model missing',None)
+            return response
         vn.set_model(modelName)
         vn.run_sql = run_vanna_sql_sqlServer
         if statementType == 'documentation':
@@ -108,5 +129,26 @@ def train_with_statement(modelName:str,statement: str,statementType: str)  -> cl
         response = clsResponse.Response(False,e,None)
         return response    
 
+def generate_sql(modelName:str,question: str)  -> clsResponse.Response:
+      try:
+        vn.set_api_key('d72ab2501d4e426e99baf6b5ed3e750e')
+        models = vn.get_models()
+        models = vn.get_models()
+        if(str(modelName) in models):
+            print('Model Exist')
+        else:
+            print('Model missing')
+            response = clsResponse.Response(False,'Model missing',None)
+            return response
+        vn.set_api_key('d72ab2501d4e426e99baf6b5ed3e750e')
+        vn.set_model(modelName)
+        vn.run_sql = run_vanna_sql_sqlServer
+        resp = vn.generate_sql(question)
+        print(resp)
+        response = clsResponse.Response(True,'',resp)
+        return response
+      except Exception as e:
+        response = clsResponse.Response(False,e,None)
+        return response    
    
    

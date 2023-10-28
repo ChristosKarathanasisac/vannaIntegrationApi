@@ -7,14 +7,29 @@ import vannaUtilities
 # Create a Flask web server
 app = Flask(__name__)
 
-# Define a route for the root URL ("/") that returns "Hello, World!"
+"""
+{
+    "model": "testssmodel",
+    "question": "What are the details of a specific mtrl which is appears on the web, is active, including its mtrl,code as groupcode,a field that combines the field mtrl.code with the field cccmtrlDim.CDIM1CODE as a string, using the ISNULL function to replace any NULL values with empty strings as code,a field that combines the field mtrl.code with the fields cccmtrlDim.CDIM1CODE and cccmtrlDim.CDIM2CODE as a string, using the ISNULL function to replace any NULL values with empty strings as sku,retail price,name,group group name,mark,mark name,model,model name,remarks,weight,manufacturer,APV code,color name as color,color code as CDIM01,size name as size,size code as CDIM02,web view,insertion date,and e-shop status"
+}
+ """ 
 @app.route('/generateSQL', methods=['POST'])
 def generate_sql():
      try:   
-      return None
+      requestDataDict = request.get_json()
+      print(str(requestDataDict))
+      model = requestDataDict['model']
+      print(model)
+      question = requestDataDict['question']
+      print(question)
+      respdata = vannaUtilities.generate_sql(model,question)
+      #class to dictionary
+      obj_dict = vars(respdata)
+      return obj_dict
      except Exception as e:
-         print("An error occurred:", e)
-         return 
+         response = clsResponse.Response(False,e,None)
+         obj_dict = vars(response)
+         return response  
 #Request Json {"server": "LAPTOP-M522HAH2\\SQLEXPRESS","db":"STAN_STEFAN"}     
 @app.route('/getDatabaseTableNames', methods=['POST'])
 def get_database_tables():
@@ -27,7 +42,8 @@ def get_database_tables():
       obj_dict = vars(respdata)
       return obj_dict
      except Exception as e:
-         response = clsResponse.Response(False,str(e),None)
+         response = clsResponse.Response(False,e,None)
+         obj_dict = vars(response)
          return response 
 
 #Request Json {"server": "LAPTOP-M522HAH2\\SQLEXPRESS","db":"STAN_STEFAN"} 
@@ -42,8 +58,9 @@ def get_database_views():
       obj_dict = vars(respdata)
       return obj_dict
      except Exception as e:
-         response = clsResponse.Response(False,str(e),None)
-         return response 
+         response = clsResponse.Response(False,e,None)
+         obj_dict = vars(response)
+         return response  
 #Request Json {"model": "aModelJustForTest"}
 @app.route('/createModel', methods=['POST'])
 def createModel():
@@ -54,10 +71,11 @@ def createModel():
       obj_dict = vars(respdata)
       return obj_dict
    except Exception as e:
-         response = clsResponse.Response(False,str(e),None)
-         return response 
+        response = clsResponse.Response(False,e,None)
+        obj_dict = vars(response)
+        return response  
 """
-{"model": "m_ssfan",
+{"model": "testssmodel",
   "server": "LAPTOP-M522HAH2\\SQLEXPRESS",
   "db":"STAN_STEFAN",
   "desired_table_names":["MTRL", "MTRGROUP", "MTRMARK", "MTRMODEL"]
@@ -75,11 +93,12 @@ def trainWithTables():
       obj_dict = vars(respdata)
       return obj_dict
    except Exception as e:
-         response = clsResponse.Response(False,str(e),None)
-         return response 
+         response = clsResponse.Response(False,e,None)
+         obj_dict = vars(response)
+         return response  
    
 """
-{"model": "m_ssfan",
+{"model": "testssmodel",
   "server": "LAPTOP-M522HAH2\\SQLEXPRESS",
   "db":"STAN_STEFAN",
   "desired_table_names":["cccVMtrlDim"]
@@ -97,10 +116,11 @@ def trainWithViews():
       obj_dict = vars(respdata)
       return obj_dict
    except Exception as e:
-         response = clsResponse.Response(False,str(e),None)
-         return response 
+         response = clsResponse.Response(False,e,None)
+         obj_dict = vars(response)
+         return response  
 """
-{"model": "m_ssfan",
+{"model": "testssmodel",
  "statement":"The MTRL contains the products infos"
  }
 """
@@ -114,11 +134,12 @@ def trainWithDDL():
       obj_dict = vars(respdata)
       return obj_dict
    except Exception as e:
-         response = clsResponse.Response(False,str(e),None)
-         return response 
+         response = clsResponse.Response(False,e,None)
+         obj_dict = vars(response)
+         return response  
 
 """
-{"model": "m_ssfan",
+{"model": "testssmodel",
  "statement":"The MTRL contains the products infos"
  }
 """   
@@ -132,10 +153,11 @@ def trainWithSQL():
       obj_dict = vars(respdata)
       return obj_dict
    except Exception as e:
-         response = clsResponse.Response(False,str(e),None)
-         return response 
+         response = clsResponse.Response(False,e,None)
+         obj_dict = vars(response)
+         return response  
 """
-{"model": "m_ssfan",
+{"model": "testssmodel",
  "statement":"The MTRL contains the products infos"
  }
 """   
@@ -150,6 +172,7 @@ def trainWithDocumentation():
       return obj_dict
    except Exception as e:
          response = clsResponse.Response(False,str(e),None)
+         obj_dict = vars(response)
          return response 
 
 # Run the Flask app on localhost, port 5000
