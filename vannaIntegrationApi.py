@@ -46,7 +46,7 @@ def get_database_views():
          return response 
 #Request Json {"model": "aModelJustForTest"}
 @app.route('/createModel', methods=['POST'])
-def trainModelWithDDL():
+def createModel():
    try:   
       requestDataDict = request.get_json()
       modelName = requestDataDict['model']
@@ -56,7 +56,49 @@ def trainModelWithDDL():
    except Exception as e:
          response = clsResponse.Response(False,str(e),None)
          return response 
+"""
+{"model": "m_ssfan",
+  "server": "LAPTOP-M522HAH2\\SQLEXPRESS",
+  "db":"STAN_STEFAN",
+  "desired_table_names":["MTRL", "MTRGROUP", "MTRMARK", "MTRMODEL"]
+ }
+"""
+@app.route('/trainWithTables', methods=['POST'])
+def trainWithTables():
+   try:   
+      requestDataDict = request.get_json()
+      modelName = requestDataDict['model']
+      server = requestDataDict['server']
+      db = requestDataDict['db']
+      desired_table_names = requestDataDict['desired_table_names']
+      respdata = vannaUtilities.train_with_tables(modelName,server,db,desired_table_names)
+      obj_dict = vars(respdata)
+      return obj_dict
+   except Exception as e:
+         response = clsResponse.Response(False,str(e),None)
+         return response 
    
+"""
+{"model": "m_ssfan",
+  "server": "LAPTOP-M522HAH2\\SQLEXPRESS",
+  "db":"STAN_STEFAN",
+  "desired_table_names":["cccVMtrlDim"]
+ }
+"""
+@app.route('/trainWithViews', methods=['POST'])
+def trainWithViews():
+   try:   
+      requestDataDict = request.get_json()
+      modelName = requestDataDict['model']
+      server = requestDataDict['server']
+      db = requestDataDict['db']
+      desired_view_names = requestDataDict['desired_view_names']
+      respdata = vannaUtilities.train_with_views(modelName,server,db,desired_view_names)
+      obj_dict = vars(respdata)
+      return obj_dict
+   except Exception as e:
+         response = clsResponse.Response(False,str(e),None)
+         return response 
 
 """
 @app.route('/trainModelWithDDL', methods=['POST'])

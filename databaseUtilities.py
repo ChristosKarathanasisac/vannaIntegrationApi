@@ -31,11 +31,7 @@ def execute_sql_query(server: str, database: str,sql: str)->clsResponse.Response
 
 def retrieve_names_of_all_tables(server: str,database: str)->clsResponse.Response:
    try:
-    sqlTodb = ""
-    #Open the query from file
-    with open('create_table_sql_generator.txt', 'r') as file:
-        sqlTodb = file.read()
-        sql = 'SELECT table_name FROM information_schema.tables'
+    sql = 'SELECT table_name FROM information_schema.tables'
     resp =  execute_sql_query(server,database,sql)
     if(resp.success):
        response = clsResponse.Response(True,'',resp.data)
@@ -60,3 +56,11 @@ def retrieve_names_of_all_views(server: str,database: str)->clsResponse.Response
    except Exception as e:
     response = clsResponse.Response(False,str(e),None)
     return response
+   
+def simple_execute_sql_query(server: str, database: str,sql: str):  
+        connection_string = f'DRIVER={{SQL Server}};SERVER={server};DATABASE={database};TRUSTED_CONNECTION=yes'
+        conn = pyodbc.connect(connection_string)
+        cursor = conn.cursor()
+        cursor.execute(sql)
+        rows = cursor.fetchall()
+        return rows
