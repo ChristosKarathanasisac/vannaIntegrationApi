@@ -99,31 +99,58 @@ def trainWithViews():
    except Exception as e:
          response = clsResponse.Response(False,str(e),None)
          return response 
-
 """
-@app.route('/trainModelWithDDL', methods=['POST'])
-def trainModelWithDDL():
+{"model": "m_ssfan",
+ "statement":"The MTRL contains the products infos"
+ }
+"""
+@app.route('/trainWithDDL', methods=['POST'])
+def trainWithDDL():
    try:   
       requestDataDict = request.get_json()
-      serverValue = requestDataDict['model']
-      #dbValue = requestDataDict['db']
-      respdata = databaseUtilities.retrieve_names_of_all_views(serverValue,dbValue)
-      #class to dictionary
+      modelName = requestDataDict['model']
+      statement = requestDataDict['statement']
+      respdata = vannaUtilities.train_with_statement(modelName,statement,'ddl')
       obj_dict = vars(respdata)
       return obj_dict
    except Exception as e:
          response = clsResponse.Response(False,str(e),None)
          return response 
-   
-@app.route('/trainModelWithDocumentation', methods=['POST'])
-def trainModelWithDocumentation():
-   
-@app.route('/trainModelWithDocumentation', methods=['POST'])
-def trainModelWithSQL():
-"""
 
-   
-   
+"""
+{"model": "m_ssfan",
+ "statement":"The MTRL contains the products infos"
+ }
+"""   
+@app.route('/trainWithSQL', methods=['POST'])
+def trainWithSQL():
+   try:   
+      requestDataDict = request.get_json()
+      modelName = requestDataDict['model']
+      statement = requestDataDict['statement']
+      respdata = vannaUtilities.train_with_statement(modelName,statement,'sql')
+      obj_dict = vars(respdata)
+      return obj_dict
+   except Exception as e:
+         response = clsResponse.Response(False,str(e),None)
+         return response 
+"""
+{"model": "m_ssfan",
+ "statement":"The MTRL contains the products infos"
+ }
+"""   
+@app.route('/trainWithDocumentation', methods=['POST'])
+def trainWithDocumentation():
+   try:   
+      requestDataDict = request.get_json()
+      modelName = requestDataDict['model']
+      statement = requestDataDict['statement']
+      respdata = vannaUtilities.train_with_statement(modelName,statement,'documentation')
+      obj_dict = vars(respdata)
+      return obj_dict
+   except Exception as e:
+         response = clsResponse.Response(False,str(e),None)
+         return response 
 
 # Run the Flask app on localhost, port 5000
 if __name__ == '__main__':

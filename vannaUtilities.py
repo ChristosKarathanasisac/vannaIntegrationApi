@@ -91,6 +91,22 @@ def train_with_views(modelName:str,server: str,database: str,desired_view_names:
         response = clsResponse.Response(False,e,None)
         return response    
 
-   
+def train_with_statement(modelName:str,statement: str,statementType: str)  -> clsResponse.Response:
+      try:
+        vn.set_api_key('d72ab2501d4e426e99baf6b5ed3e750e')
+        vn.set_model(modelName)
+        vn.run_sql = run_vanna_sql_sqlServer
+        if statementType == 'documentation':
+            vn.train(documentation=statement)
+        elif statementType == 'ddl':
+            vn.train(ddl=statement)
+        elif statementType == 'sql':
+            vn.train(sql=statement)
+        response = clsResponse.Response(True,'',None)
+        return response
+      except Exception as e:
+        response = clsResponse.Response(False,e,None)
+        return response    
+
    
    
