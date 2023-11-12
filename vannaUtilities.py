@@ -36,6 +36,11 @@ def get_clear_string(string: str) -> str:
 def create_new_model(modelName:str) -> clsResponse.Response:
     try:
         vn.set_api_key('d72ab2501d4e426e99baf6b5ed3e750e')
+        models = vn.get_models()
+        if(str(modelName) in models):
+            response = clsResponse.Response(False,'Model already Exist.',None)
+            return response
+        
         success = vn.create_model(model= modelName, db_type="sqlServer")
         if(success):
             response = clsResponse.Response(True,'',None)
@@ -43,6 +48,19 @@ def create_new_model(modelName:str) -> clsResponse.Response:
             response = clsResponse.Response(False,
                                             'The model does not created. Try Again with other name',
                                             None)
+        return response
+    except Exception as e:
+        response = clsResponse.Response(False,e,None)
+        return response
+def check_if_model_exists(modelName:str) -> clsResponse.Response:
+    try:
+        vn.set_api_key('d72ab2501d4e426e99baf6b5ed3e750e')
+        models = vn.get_models()
+        if(str(modelName) in models):
+            response = clsResponse.Response(True,'',None)
+        else:
+            print('Model missing')
+            response = clsResponse.Response(False,'Model missing',None)
         return response
     except Exception as e:
         response = clsResponse.Response(False,e,None)

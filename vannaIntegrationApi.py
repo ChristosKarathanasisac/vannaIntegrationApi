@@ -74,6 +74,21 @@ def createModel():
         response = clsResponse.Response(False,e,None)
         obj_dict = vars(response)
         return response  
+
+#Request Json {"model": "aModelJustForTest"}
+@app.route('/checkIfModelExist', methods=['POST'])
+def checkIfModelExist():
+   try:   
+      requestDataDict = request.get_json()
+      modelName = requestDataDict['model']
+      respdata = vannaUtilities.check_if_model_exists(modelName)
+      obj_dict = vars(respdata)
+      return obj_dict
+   except Exception as e:
+        response = clsResponse.Response(False,e,None)
+        obj_dict = vars(response)
+        return response 
+
 """
 {"model": "testssmodel",
   "server": "LAPTOP-M522HAH2\\SQLEXPRESS",
